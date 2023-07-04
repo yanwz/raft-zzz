@@ -9,13 +9,25 @@ import java.util.Objects;
 @Getter
 public class CallableRaftReq {
 
+    private final boolean oneway;
+
     private final RaftReq raftReq;
 
-    private final Promise<Object> promise;
+    private final Promise<?> promise;
 
-    public CallableRaftReq(RaftReq raftReq, Promise<Object> promise) {
+
+    public CallableRaftReq(RaftReq raftReq, Promise<?> promise) {
         Objects.requireNonNull(raftReq);
         Objects.requireNonNull(promise);
+        this.oneway = true;
+        this.raftReq = raftReq;
+        this.promise = promise;
+    }
+
+    public CallableRaftReq(RaftReq raftReq, Promise<?> promise,boolean oneway) {
+        Objects.requireNonNull(raftReq);
+        Objects.requireNonNull(promise);
+        this.oneway = oneway;
         this.raftReq = raftReq;
         this.promise = promise;
     }

@@ -4,7 +4,9 @@ import com.zzz.call.CallableRaftReq;
 import com.zzz.call.Request;
 import com.zzz.call.Response;
 import com.zzz.call.exception.ErrorResException;
+import com.zzz.call.message.res.RaftRsp;
 import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.util.concurrent.Promise;
@@ -15,26 +17,41 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
-public class CallableHandler extends ChannelDuplexHandler {
+public class CallableCodec extends ChannelDuplexHandler {
 
-    private final Map<String, Promise<Object>> promiseContext;
+    private final Map<String, Promise<RaftRsp>> promiseContext;
 
 
-    public CallableHandler() {
+    public CallableCodec() {
         this.promiseContext = new HashMap<>();
     }
 
     @Override
-    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise writePromise) throws Exception {
+    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         if (msg instanceof CallableRaftReq) {
-            CallableRaftReq callableMessage = (CallableRaftReq) msg;
-            Promise<Object> promise = callableMessage.getPromise();
+            CallableRaftReq callableRaftReq = (CallableRaftReq) msg;
+            Promise<?> callPromise = callableRaftReq.getPromise();
+            boolean oneway = callableRaftReq.isOneway();
             String id = generateId();
-            promise.addListener(future -> promiseContext.remove(id));
-            promiseContext.put(id, promise);
-            msg = new Request(id, callableMessage.getRaftReq());
+            msg = new Request(id, callableRaftReq.getRaftReq());
+            if(!oneway){
+                promiseContext.put(id, (Promise<RaftRsp>)callPromise);
+                promise.addListener(future -> promiseContext.remove(id));
+            }
+            ChannelFuture future = ctx.write(msg, promise.unvoid());
+            future.addListener(f -> {
+                if(f.isSuccess()){
+                    if(oneway){
+                        callPromise.trySuccess(null);
+                    }
+                }else {
+                    callPromise.tryFailure(f.cause());
+                }
+            });
+            callPromise.addListener((f)->future.cancel(false));
+        }else {
+            ctx.write(msg, promise);
         }
-        ctx.write(msg, writePromise);
     }
 
     private String generateId() {
@@ -45,7 +62,7 @@ public class CallableHandler extends ChannelDuplexHandler {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (msg instanceof Response) {
             Response response = (Response) msg;
-            Promise<Object> promise = promiseContext.get(response.getId());
+            Promise<RaftRsp> promise = promiseContext.get(response.getId());
             if (promise != null) {
                 if(response.isSuccess()){
                     promise.trySuccess(response.getContent());
@@ -60,9 +77,9 @@ public class CallableHandler extends ChannelDuplexHandler {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        Iterator<Promise<Object>> iterator = promiseContext.values().iterator();
+        Iterator<Promise<RaftRsp>> iterator = promiseContext.values().iterator();
         while (iterator.hasNext()) {
-            Promise<Object> promise = iterator.next();
+            Promise<RaftRsp> promise = iterator.next();
             promise.tryFailure(new ClosedChannelException());
             iterator.remove();
         }

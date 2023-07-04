@@ -47,7 +47,7 @@ public class MessageCodec extends ChannelDuplexHandler {
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        ctx.writeAndFlush(Unpooled.wrappedBuffer(serialize(msg)), promise);
+        ctx.writeAndFlush(Unpooled.wrappedBuffer(new byte[]{HEADER},serialize(msg)), promise);
     }
 
     private byte[] serialize(Object msg) {

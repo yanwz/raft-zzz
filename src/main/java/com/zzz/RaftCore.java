@@ -1,11 +1,7 @@
 package com.zzz;
 
 
-import com.zzz.net.Cluster;
 import com.zzz.call.Call;
-import com.zzz.call.TypeParameterPromise;
-import com.zzz.config.ElectConfig;
-import com.zzz.log.*;
 import com.zzz.call.message.req.PreVoteReq;
 import com.zzz.call.message.req.RaftReq;
 import com.zzz.call.message.req.ReplicationLogReq;
@@ -14,6 +10,9 @@ import com.zzz.call.message.res.PreVoteRes;
 import com.zzz.call.message.res.RaftRsp;
 import com.zzz.call.message.res.ReplicationLogRes;
 import com.zzz.call.message.res.VoteRes;
+import com.zzz.config.ElectConfig;
+import com.zzz.log.*;
+import com.zzz.net.Cluster;
 import io.netty.util.concurrent.EventExecutor;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -57,7 +56,6 @@ public final class RaftCore {
         this.roleHandler.init();
     }
 
-
     public Future<RaftRsp> handle(SocketAddress remoteAddress, RaftReq raftReq,Promise<RaftRsp> promise) {
         if(this.executor.inEventLoop()){
             handle0(remoteAddress, raftReq,promise);
@@ -66,6 +64,8 @@ public final class RaftCore {
         }
         return promise;
     }
+
+
     public void handle0(SocketAddress remoteAddress, RaftReq raftReq,Promise<RaftRsp> promise) {
         try {
             assert this.executor.inEventLoop();
@@ -94,6 +94,9 @@ public final class RaftCore {
         }
 
         public abstract void init();
+
+        public void appendLog(byte[] command){
+        }
 
         public abstract RaftRsp handle(SocketAddress remoteAddress, RaftReq raftReq);
 
@@ -276,8 +279,7 @@ public final class RaftCore {
                 String id = UUID.randomUUID().toString().replaceAll("-", "");
                 preVoteRequestIdMap.put(remoteAddress, id);
                 PreVoteReq preVoteReq = new PreVoteReq(this.term + 1, RaftCore.this.logStorage.getLastLogMeta());
-                Future<PreVoteRes> promise = RaftCore.this.call.call(remoteAddress, preVoteReq, new TypeParameterPromise<PreVoteRes>(RaftCore.this.executor) {
-                });
+                Future<PreVoteRes> promise = RaftCore.this.call.call(remoteAddress, preVoteReq, RaftCore.this.executor.newPromise());
                 promise.addListener((GenericFutureListener<Future<PreVoteRes>>) future -> {
                     if (future.isSuccess()) {
                         PreVoteRes preVoteRes = future.get();
@@ -376,8 +378,7 @@ public final class RaftCore {
 
             for (SocketAddress remoteAddress : cluster.otherNodes()) {
                 VoteReq voteReq = new VoteReq(this.term + 1, RaftCore.this.logStorage.getLastLogMeta());
-                Future<VoteRes> promise = RaftCore.this.call.call(remoteAddress, voteReq, new TypeParameterPromise<VoteRes>(RaftCore.this.executor) {
-                });
+                Future<VoteRes> promise = RaftCore.this.call.call(remoteAddress, voteReq, RaftCore.this.executor.newPromise());
                 voteRequestFutureList.add(promise);
                 promise.addListener((GenericFutureListener<Future<VoteRes>>) future -> {
                     voteRequestFutureList.remove(future);
@@ -498,8 +499,7 @@ public final class RaftCore {
                         promise.cancel(false);
                         promise = null;
                     }
-                    promise = RaftCore.this.call.call(remoteAddress, replicationLogRequest, new TypeParameterPromise<ReplicationLogRes>(RaftCore.this.executor) {
-                    });
+                    promise = RaftCore.this.call.call(remoteAddress, replicationLogRequest, RaftCore.this.executor.newPromise());
                     promise.addListener((GenericFutureListener<Future<ReplicationLogRes>>) future -> {
                                 promise = null;
                                 if (future.isSuccess()) {
