@@ -3,7 +3,7 @@ package com.zzz.rpc.client.codec;
 import com.zzz.rpc.client.CallableRaftReq;
 import com.zzz.rpc.message.Request;
 import com.zzz.rpc.message.Response;
-import com.zzz.rpc.client.exception.ErrorResException;
+import com.zzz.rpc.client.exception.ErrorCodeException;
 import com.zzz.rpc.message.res.RaftRsp;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelFuture;
@@ -67,7 +67,7 @@ public class CallableCodec extends ChannelDuplexHandler {
                 if(response.isSuccess()){
                     promise.trySuccess(response.getContent());
                 }else {
-                    promise.tryFailure(new ErrorResException(response.getErrorCode()));
+                    promise.tryFailure(new ErrorCodeException(response.getErrorCode()));
                 }
             }
         } else {

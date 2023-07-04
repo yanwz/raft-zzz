@@ -1,9 +1,9 @@
 package com.zzz.rpc.client.exception;
 
-public class ErrorResException extends RuntimeException {
+public class ErrorCodeException extends RuntimeException {
     private final Integer errorCode;
 
-    public ErrorResException(Integer errorCode) {
+    public ErrorCodeException(Integer errorCode) {
         this.errorCode = errorCode;
     }
 }
