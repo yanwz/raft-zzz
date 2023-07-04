@@ -1,13 +1,13 @@
-package com.zzz.call.message.res;
+package com.zzz.rpc.message.res;
 
 import lombok.Getter;
 
 @Getter
-public class VoteRes extends RaftRsp {
+public class PreVoteRes extends RaftRsp {
 
     private final Boolean voteGranted;
 
-    public VoteRes(int term, boolean voteGranted) {
+    public PreVoteRes(int term, boolean voteGranted) {
         super(term);
         this.voteGranted = voteGranted;
     }

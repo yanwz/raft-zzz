@@ -1,10 +1,10 @@
-package com.zzz.handler;
+package com.zzz.rpc.server;
 
 import com.zzz.RaftCore;
-import com.zzz.call.Request;
-import com.zzz.call.Response;
-import com.zzz.call.message.req.RaftReq;
-import com.zzz.call.message.res.RaftRsp;
+import com.zzz.rpc.message.Request;
+import com.zzz.rpc.message.Response;
+import com.zzz.rpc.message.req.RaftReq;
+import com.zzz.rpc.message.res.RaftRsp;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

@@ -1,6 +1,6 @@
-package com.zzz.call;
+package com.zzz.rpc.client;
 
-import com.zzz.call.message.req.RaftReq;
+import com.zzz.rpc.message.req.RaftReq;
 import io.netty.util.concurrent.Promise;
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
-package com.zzz.call;
+package com.zzz.rpc.message;
 
 
-import com.zzz.call.message.res.RaftRsp;
+import com.zzz.rpc.message.res.RaftRsp;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,4 +1,4 @@
-package com.zzz.call.message.res;
+package com.zzz.rpc.message.res;
 
 import lombok.Getter;
 

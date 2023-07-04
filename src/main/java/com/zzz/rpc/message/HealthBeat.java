@@ -1,6 +1,6 @@
-package com.zzz.call.message;
+package com.zzz.rpc.message;
 
-public class HealthBeat {
+public final class HealthBeat {
 
     public static final HealthBeat INSTANCE = new HealthBeat();
 

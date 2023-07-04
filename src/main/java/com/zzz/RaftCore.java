@@ -1,15 +1,15 @@
 package com.zzz;
 
 
-import com.zzz.call.Call;
-import com.zzz.call.message.req.PreVoteReq;
-import com.zzz.call.message.req.RaftReq;
-import com.zzz.call.message.req.ReplicationLogReq;
-import com.zzz.call.message.req.VoteReq;
-import com.zzz.call.message.res.PreVoteRes;
-import com.zzz.call.message.res.RaftRsp;
-import com.zzz.call.message.res.ReplicationLogRes;
-import com.zzz.call.message.res.VoteRes;
+import com.zzz.rpc.client.Call;
+import com.zzz.rpc.message.req.PreVoteReq;
+import com.zzz.rpc.message.req.RaftReq;
+import com.zzz.rpc.message.req.ReplicationLogReq;
+import com.zzz.rpc.message.req.VoteReq;
+import com.zzz.rpc.message.res.PreVoteRes;
+import com.zzz.rpc.message.res.RaftRsp;
+import com.zzz.rpc.message.res.ReplicationLogRes;
+import com.zzz.rpc.message.res.VoteRes;
 import com.zzz.config.ElectConfig;
 import com.zzz.log.*;
 import com.zzz.net.Cluster;

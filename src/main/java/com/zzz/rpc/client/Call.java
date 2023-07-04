@@ -1,10 +1,10 @@
-package com.zzz.call;
+package com.zzz.rpc.client;
 
-import com.zzz.call.codec.CallableCodec;
-import com.zzz.call.message.req.RaftReq;
-import com.zzz.call.message.res.RaftRsp;
-import com.zzz.handler.MessageCodec;
-import com.zzz.handler.health.HealthBeatHandler;
+import com.zzz.rpc.client.codec.CallableCodec;
+import com.zzz.rpc.message.req.RaftReq;
+import com.zzz.rpc.message.res.RaftRsp;
+import com.zzz.rpc.MessageCodec;
+import com.zzz.rpc.health.HealthBeatHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.pool.ChannelPool;

@@ -1,10 +1,10 @@
-package com.zzz.call.codec;
+package com.zzz.rpc.client.codec;
 
-import com.zzz.call.CallableRaftReq;
-import com.zzz.call.Request;
-import com.zzz.call.Response;
-import com.zzz.call.exception.ErrorResException;
-import com.zzz.call.message.res.RaftRsp;
+import com.zzz.rpc.client.CallableRaftReq;
+import com.zzz.rpc.message.Request;
+import com.zzz.rpc.message.Response;
+import com.zzz.rpc.client.exception.ErrorResException;
+import com.zzz.rpc.message.res.RaftRsp;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;

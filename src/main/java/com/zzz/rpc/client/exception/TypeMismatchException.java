@@ -1,4 +1,4 @@
-package com.zzz.call.exception;
+package com.zzz.rpc.client.exception;
 
 public class TypeMismatchException extends RuntimeException{
 

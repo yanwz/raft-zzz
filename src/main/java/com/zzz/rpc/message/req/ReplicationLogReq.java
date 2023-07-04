@@ -1,4 +1,4 @@
-package com.zzz.call.message.req;
+package com.zzz.rpc.message.req;
 
 import com.zzz.log.LogReplicationEntry;
 import lombok.Getter;

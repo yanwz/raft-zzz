@@ -1,6 +1,6 @@
-package com.zzz.call.message.res;
+package com.zzz.rpc.message.res;
 
-import com.zzz.call.message.RaftMessage;
+import com.zzz.rpc.message.RaftMessage;
 
 public abstract class RaftRsp extends RaftMessage {
 

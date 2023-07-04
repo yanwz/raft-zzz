@@ -1,6 +1,6 @@
-package com.zzz.call;
+package com.zzz.rpc.message;
 
-import com.zzz.call.message.req.RaftReq;
+import com.zzz.rpc.message.req.RaftReq;
 import lombok.Getter;
 
 import java.util.Objects;

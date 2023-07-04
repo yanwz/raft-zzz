@@ -1,4 +1,4 @@
-package com.zzz.call;
+package com.zzz.rpc.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.pool.AbstractChannelPoolMap;
